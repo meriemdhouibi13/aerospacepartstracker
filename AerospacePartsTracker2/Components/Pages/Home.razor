@@ -1,0 +1,108 @@
+﻿@page "/"
+
+<PageTitle>AeroPartsTracker — Home</PageTitle>
+
+<link href="css/home.css" rel="stylesheet" />
+
+<div class="home-root">
+
+    <div class="home-hero">
+        <div class="home-hero-badge">Programming Languages · Spring 2025</div>
+        <h1 class="home-hero-title">
+            Aerospace Parts<br />
+            <span class="home-hero-accent">Tracker</span>
+        </h1>
+        <p class="home-hero-sub">
+            A student engineering suite built for the Programming Languages course at Bethel College.
+            Three interconnected modules apply real computational mathematics to aerospace manufacturing problems.
+        </p>
+        <a href="parts-manufacturing" class="home-cta">
+            Open Engineering Suite
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+            </svg>
+        </a>
+    </div>
+
+    <div class="home-modules">
+
+        <div class="home-module-card">
+            <div class="home-module-icon geo">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 22 20 2 20" />
+                </svg>
+            </div>
+            <div class="home-module-tag">Module 1</div>
+            <h3>Part Geometry Validation</h3>
+            <p>
+                Input three 3-D surface coordinates. The app computes the plane equation,
+                unit normal vector, and perpendicular distance from the origin using
+                cross products and dot products — verifying that a machined bracket face
+                meets its angular specification.
+            </p>
+            <div class="home-module-tech">Linear Algebra · Cross Product · Dot Product</div>
+        </div>
+
+        <div class="home-module-card">
+            <div class="home-module-icon tol">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
+            </div>
+            <div class="home-module-tag">Module 2</div>
+            <h3>Tolerance Stack-Up Analysis</h3>
+            <p>
+                Enter a part ID, nominal dimension, standard deviation, and sample size.
+                The app returns the 95% confidence interval, probability of conformance,
+                and Cp / Cpk process capability indices — flagging machining drift before
+                non-conforming parts are produced.
+            </p>
+            <div class="home-module-tech">Statistics · Normal Distribution · MathNet.Numerics</div>
+        </div>
+
+        <div class="home-module-card">
+            <div class="home-module-icon bom">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg>
+            </div>
+            <div class="home-module-tag">Module 3</div>
+            <h3>BOM Optimizer</h3>
+            <p>
+                Select quantities for three assembly types, each with fixed screw demands.
+                A brute-force integer optimizer finds the minimum-cost combination of
+                small, medium, and large fastener packs — reducing procurement waste
+                across production lines.
+            </p>
+            <div class="home-module-tech">Integer Optimization · Brute-Force Search</div>
+        </div>
+
+    </div>
+
+    <div class="home-features">
+        <div class="home-feature-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>
+            Real-time validation & loading indicators
+        </div>
+        <div class="home-feature-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>
+            ApexCharts — normal distribution curve & pack bar chart
+        </div>
+        <div class="home-feature-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>
+            History log — last 5 calculations per module
+        </div>
+        <div class="home-feature-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>
+            mm / in unit conversion toggle
+        </div>
+        <div class="home-feature-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>
+            PDF export via print stylesheet
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,112 @@
+﻿
+.apm-nav {
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    min-height: 100vh;
+    background: #0d0f14;
+    border-right: 1px solid #252840;
+    padding: 24px 0 32px;
+    font-family: 'DM Sans', 'Segoe UI', sans-serif;
+}
+
+/* Brand */
+.apm-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px 28px;
+    border-bottom: 1px solid #252840;
+    margin-bottom: 20px;
+}
+
+.apm-nav-brand-text {
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    color: #e4e6f0;
+}
+
+.apm-nav-accent {
+    color: #00d4b8;
+}
+
+/* Section label */
+.apm-nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #7a7f9a;
+    padding: 0 20px 10px;
+}
+
+/* Nav list */
+.apm-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 12px;
+    flex: 1;
+}
+
+    .apm-nav-list li {
+        margin-bottom: 2px;
+    }
+
+.apm-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #7a7f9a;
+    text-decoration: none;
+    transition: background .15s, color .15s;
+}
+
+    .apm-nav-link:hover {
+        background: #1c2030;
+        color: #e4e6f0;
+    }
+
+    .apm-nav-link.active {
+        background: rgba(0, 212, 184, .1);
+        color: #00d4b8;
+        border: 1px solid rgba(0, 212, 184, .2);
+    }
+
+    .apm-nav-link svg {
+        flex-shrink: 0;
+        opacity: .7;
+    }
+
+    .apm-nav-link.active svg,
+    .apm-nav-link:hover svg {
+        opacity: 1;
+    }
+
+/* Footer */
+.apm-nav-footer {
+    padding: 20px 20px 0;
+    border-top: 1px solid #252840;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.apm-nav-footer-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #7a7f9a;
+    letter-spacing: .03em;
+}
+
+.apm-nav-footer-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: #363b5c;
+}

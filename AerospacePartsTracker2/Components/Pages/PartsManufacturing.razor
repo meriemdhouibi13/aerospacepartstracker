@@ -1,0 +1,557 @@
+﻿@page "/parts-manufacturing"
+@using AerospacePartsTracker2.Models
+@using AerospacePartsTracker2.Services
+@using ApexCharts
+@inject PartsCalculationService CalcService
+@inject IJSRuntime JS
+@rendermode InteractiveServer
+
+<PageTitle>Parts Manufacturing</PageTitle>
+
+<link href="css/parts-manufacturing.css" rel="stylesheet" />
+
+<div class="apm-root">
+
+    <!-- Header -->
+    <header class="apm-header">
+        <div class="apm-header-inner">
+            <div class="apm-logo">
+                <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+                    <polygon points="14,2 26,22 2,22" stroke="#00d4b8" stroke-width="2" fill="none" />
+                    <circle cx="14" cy="14" r="3" fill="#00d4b8" />
+                </svg>
+                <span class="apm-logo-text">AeroParts<span class="apm-logo-accent">MFG</span></span>
+            </div>
+            <div class="apm-header-controls">
+                <button class="apm-toggle" @onclick="ToggleUnit">
+                    <span class="@(!UseInches ? "unit-active" : "")">mm</span>
+                    <span class="toggle-sep">/</span>
+                    <span class="@(UseInches ? "unit-active" : "")">in</span>
+                </button>
+                <button class="apm-btn-icon" @onclick="ExportPdf">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                    Export PDF
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="apm-main">
+        <div class="apm-page-title">
+            <h1>Parts Manufacturing Engineering Suite</h1>
+            <p>Geometry validation &middot; Tolerance analysis &middot; BOM optimization</p>
+        </div>
+
+        <div class="apm-modules">
+
+            <!-- ═══════════════ MODULE 1: GEOMETRY ═══════════════ -->
+            <section class="apm-card">
+                <div class="apm-card-header">
+                    <div class="apm-card-icon geo-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 22 20 2 20" />
+                        </svg>
+                    </div>
+                    <div class="apm-card-header-text">
+                        <h2>Module 1 &mdash; Part Geometry Validation</h2>
+                        <p class="apm-card-sub">Verify bracket face angular orientation via plane equation</p>
+                    </div>
+                    <button class="apm-history-btn" @onclick="@(() => ToggleHistory(1))">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        History
+                    </button>
+                </div>
+
+                <div class="apm-card-body">
+                    <div class="apm-point-grid">
+                        <div class="apm-point-row">
+                            <span class="apm-point-label p1-label">P1</span>
+                            <div class="apm-coord-inputs">
+                                <div class="apm-input-group">
+                                    <label>x</label>
+                                    <input type="number" step="0.001" class="apm-input" @bind="Geo.P1.X" placeholder="0.000" />
+                                </div>
+                                <div class="apm-input-group">
+                                    <label>y</label>
+                                    <input type="number" step="0.001" class="apm-input" @bind="Geo.P1.Y" placeholder="0.000" />
+                                </div>
+                                <div class="apm-input-group">
+                                    <label>z</label>
+                                    <input type="number" step="0.001" class="apm-input" @bind="Geo.P1.Z" placeholder="0.000" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="apm-point-row">
+                            <span class="apm-point-label p2-label">P2</span>
+                            <div class="apm-coord-inputs">
+                                <div class="apm-input-group">
+                                    <label>x</label>
+                                    <input type="number" step="0.001" class="apm-input" @bind="Geo.P2.X" placeholder="0.000" />
+                                </div>
+                                <div class="apm-input-group">
+                                    <label>y</label>
+                                    <input type="number" step="0.001" class="apm-input" @bind="Geo.P2.Y" placeholder="0.000" />
+                                </div>
+                                <div class="apm-input-group">
+                                    <label>z</label>
+                                    <input type="number" step="0.001" class="apm-input" @bind="Geo.P2.Z" placeholder="0.000" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="apm-point-row">
+                            <span class="apm-point-label p3-label">P3</span>
+                            <div class="apm-coord-inputs">
+                                <div class="apm-input-group">
+                                    <label>x</label>
+                                    <input type="number" step="0.001" class="apm-input" @bind="Geo.P3.X" placeholder="0.000" />
+                                </div>
+                                <div class="apm-input-group">
+                                    <label>y</label>
+                                    <input type="number" step="0.001" class="apm-input" @bind="Geo.P3.Y" placeholder="0.000" />
+                                </div>
+                                <div class="apm-input-group">
+                                    <label>z</label>
+                                    <input type="number" step="0.001" class="apm-input" @bind="Geo.P3.Z" placeholder="0.000" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(GeoError))
+                    {
+                        <div class="apm-error">@GeoError</div>
+                    }
+
+                    <button class="apm-btn" @onclick="ComputeGeometry" disabled="@GeoLoading">
+                        @if (GeoLoading)
+                        {
+                            <span class="apm-spinner"></span>
+                        }
+                        Calculate Plane
+                    </button>
+
+                    @if (GeoResult != null)
+                    {
+                        <div class="apm-results">
+                            <div class="apm-result-row">
+                                <span class="apm-result-label">Plane Equation</span>
+                                <span class="apm-result-value mono">@GeoResult.PlaneEquation</span>
+                            </div>
+                            <div class="apm-result-row">
+                                <span class="apm-result-label">Unit Normal Vector</span>
+                                <span class="apm-result-value mono">@GeoResult.UnitNormal</span>
+                            </div>
+                            <div class="apm-result-row">
+                                <span class="apm-result-label">Distance from Origin</span>
+                                <span class="apm-result-value mono">@GeoResult.DistanceFromOrigin.ToString("F4") @UnitLabel</span>
+                            </div>
+                            <div>
+                                <span class="apm-status-badge @(GeoResult.IsValid ? "badge-pass" : "badge-fail")">
+                                    @(GeoResult.IsValid ? "✓ Geometry Valid" : "✗ Check Orientation")
+                                </span>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                @if (ShowingHistory == 1 && GeoHistory.Count > 0)
+                {
+                    <div class="apm-history-panel">
+                        <h4>Last @GeoHistory.Count Calculations</h4>
+                        @foreach (var h in GeoHistory)
+                        {
+                            <div class="apm-history-row" @onclick="@(() => RestoreGeoHistory(h))">
+                                <span class="mono">@h.PlaneEquation</span>
+                                <span class="apm-history-time">@h.Timestamp.ToString("HH:mm:ss")</span>
+                            </div>
+                        }
+                    </div>
+                }
+            </section>
+
+            <!-- ═══════════════ MODULE 2: TOLERANCE ═════════════ -->
+            <section class="apm-card">
+                <div class="apm-card-header">
+                    <div class="apm-card-icon tol-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                    </div>
+                    <div class="apm-card-header-text">
+                        <h2>Module 2 &mdash; Tolerance Stack-Up Analysis</h2>
+                        <p class="apm-card-sub">Statistical process capability for machined parts</p>
+                    </div>
+                    <button class="apm-history-btn" @onclick="@(() => ToggleHistory(2))">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        History
+                    </button>
+                </div>
+
+                <div class="apm-card-body">
+                    <div class="apm-form-grid">
+                        <div class="apm-input-group">
+                            <label>Part ID</label>
+                            <input type="text" class="apm-input" @bind="Tol.PartId" placeholder="e.g. Rib-442" />
+                        </div>
+                        <div class="apm-input-group">
+                            <label>Nominal Length (@UnitLabel)</label>
+                            <input type="number" step="0.001" class="apm-input" @bind="Tol.NominalLength" placeholder="100.000" />
+                        </div>
+                        <div class="apm-input-group">
+                            <label>Std Deviation &sigma; (@UnitLabel)</label>
+                            <input type="number" step="0.0001" class="apm-input" @bind="Tol.StdDev" placeholder="0.050" />
+                        </div>
+                        <div class="apm-input-group">
+                            <label>Sample Size n</label>
+                            <input type="number" min="2" class="apm-input" @bind="Tol.SampleSize" placeholder="30" />
+                        </div>
+                        <div class="apm-input-group">
+                            <label>Sample Mean (@UnitLabel)</label>
+                            <input type="number" step="0.001" class="apm-input" @bind="Tol.SampleMean" placeholder="100.010" />
+                        </div>
+                        <div class="apm-input-group">
+                            <label>Tolerance Limit &plusmn; (@UnitLabel)</label>
+                            <input type="number" step="0.001" class="apm-input" @bind="Tol.ToleranceLimit" placeholder="0.5" />
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(TolError))
+                    {
+                        <div class="apm-error">@TolError</div>
+                    }
+
+                    <button class="apm-btn" @onclick="ComputeTolerance" disabled="@TolLoading">
+                        @if (TolLoading)
+                        {
+                            <span class="apm-spinner"></span>
+                        }
+                        Analyze Tolerance
+                    </button>
+
+                    @if (TolResult != null)
+                    {
+                        <div class="apm-results">
+                            <div class="apm-result-row">
+                                <span class="apm-result-label">95% Confidence Interval</span>
+                                <span class="apm-result-value mono">[@TolResult.CILower.ToString("F4"), @TolResult.CIUpper.ToString("F4")] @UnitLabel</span>
+                            </div>
+                            <div class="apm-result-row">
+                                <span class="apm-result-label">P(within &plusmn;@Tol.ToleranceLimit @UnitLabel)</span>
+                                <span class="apm-result-value mono">@((TolResult.ProbWithinTolerance * 100).ToString("F2"))%</span>
+                            </div>
+                            <div class="apm-result-row">
+                                <span class="apm-result-label">Cp</span>
+                                <span class="apm-result-value mono @(TolResult.Cp >= 1.33 ? "val-pass" : "val-fail")">@TolResult.Cp.ToString("F4")</span>
+                            </div>
+                            <div class="apm-result-row">
+                                <span class="apm-result-label">Cpk</span>
+                                <span class="apm-result-value mono @(TolResult.Cpk >= 1.33 ? "val-pass" : "val-fail")">@TolResult.Cpk.ToString("F4")</span>
+                            </div>
+                            <div>
+                                <span class="apm-status-badge @(TolResult.Cpk >= 1.33 ? "badge-pass" : "badge-fail")">
+                                    @(TolResult.Cpk >= 1.33 ? "✓ Process Capable (Cpk ≥ 1.33)" : "✗ Process Drift Detected")
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="apm-chart-wrap">
+                            <h4 class="apm-chart-title">Normal Distribution &mdash; @Tol.PartId</h4>
+                            <ApexChart TItem="NormalDistPoint" Options="@NormalChartOptions" @ref="NormalChartRef">
+                                <ApexPointSeries TItem="NormalDistPoint"
+                                                 Items="@NormalCurveData"
+                                                 SeriesType="SeriesType.Area"
+                                                 XValue="@(e => e.X)"
+                                                 YValue="@(e => (decimal)e.Y)"
+                                                 Name="Density" />
+                            </ApexChart>
+                        </div>
+                    }
+                </div>
+
+                @if (ShowingHistory == 2 && TolHistory.Count > 0)
+                {
+                    <div class="apm-history-panel">
+                        <h4>Last @TolHistory.Count Calculations</h4>
+                        @foreach (var h in TolHistory)
+                        {
+                            <div class="apm-history-row" @onclick="@(() => RestoreTolHistory(h))">
+                                <span>@h.PartId &mdash; Cp: @h.Cp.ToString("F3") Cpk: @h.Cpk.ToString("F3")</span>
+                                <span class="apm-history-time">@h.Timestamp.ToString("HH:mm:ss")</span>
+                            </div>
+                        }
+                    </div>
+                }
+            </section>
+
+            <!-- ═══════════════ MODULE 3: BOM ════════════════════ -->
+            <section class="apm-card">
+                <div class="apm-card-header">
+                    <div class="apm-card-icon bom-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                        </svg>
+                    </div>
+                    <div class="apm-card-header-text">
+                        <h2>Module 3 &mdash; BOM Optimizer</h2>
+                        <p class="apm-card-sub">Minimum-cost screw pack procurement for production lines</p>
+                    </div>
+                    <button class="apm-history-btn" @onclick="@(() => ToggleHistory(3))">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        History
+                    </button>
+                </div>
+
+                <div class="apm-card-body">
+                    <div class="apm-assembly-grid">
+                        <div class="apm-assembly-card">
+                            <span class="apm-assembly-label">Assembly A</span>
+                            <span class="apm-assembly-sub">12 screws each</span>
+                            <input type="number" min="0" class="apm-input" @bind="Bom.QtyA" placeholder="0" />
+                        </div>
+                        <div class="apm-assembly-card">
+                            <span class="apm-assembly-label">Assembly B</span>
+                            <span class="apm-assembly-sub">23 screws each</span>
+                            <input type="number" min="0" class="apm-input" @bind="Bom.QtyB" placeholder="0" />
+                        </div>
+                        <div class="apm-assembly-card">
+                            <span class="apm-assembly-label">Assembly C</span>
+                            <span class="apm-assembly-sub">8 screws each</span>
+                            <input type="number" min="0" class="apm-input" @bind="Bom.QtyC" placeholder="0" />
+                        </div>
+                    </div>
+
+                    <div class="apm-pack-legend">
+                        <span class="apm-pack-pill small">S: 50 screws / $20</span>
+                        <span class="apm-pack-pill medium">M: 120 screws / $45</span>
+                        <span class="apm-pack-pill large">L: 300 screws / $100</span>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(BomError))
+                    {
+                        <div class="apm-error">@BomError</div>
+                    }
+
+                    <button class="apm-btn" @onclick="ComputeBom" disabled="@BomLoading">
+                        @if (BomLoading)
+                        {
+                            <span class="apm-spinner"></span>
+                        }
+                        Optimize Order
+                    </button>
+
+                    @if (BomResult != null)
+                    {
+                        <div class="apm-results">
+                            <div class="apm-result-row">
+                                <span class="apm-result-label">Total Screws Needed</span>
+                                <span class="apm-result-value mono">@BomResult.TotalScrews</span>
+                            </div>
+                            <div class="apm-result-row">
+                                <span class="apm-result-label">Optimal Pack Combination</span>
+                                <span class="apm-result-value mono">
+                                    @if (BomResult.LargePacks > 0)
+                                    {
+                                        @($"{BomResult.LargePacks} × Large")
+                                    }
+                                    @if (BomResult.MediumPacks > 0)
+                                    {
+                                        @($" + {BomResult.MediumPacks} × Medium")
+                                    }
+                                    @if (BomResult.SmallPacks > 0)
+                                    {
+                                        @($" + {BomResult.SmallPacks} × Small")
+                                    }
+                                </span>
+                            </div>
+                            <div class="apm-result-row">
+                                <span class="apm-result-label">Total Cost</span>
+                                <span class="apm-result-value mono val-pass">$@BomResult.TotalCost</span>
+                            </div>
+                            <div class="apm-result-row">
+                                <span class="apm-result-label">Leftover Screws (Waste)</span>
+                                <span class="apm-result-value mono @(BomResult.Leftover > 50 ? "val-warn" : "")">@BomResult.Leftover</span>
+                            </div>
+                        </div>
+
+                        <div class="apm-chart-wrap">
+                            <h4 class="apm-chart-title">Pack Breakdown</h4>
+                            <ApexChart TItem="PackBarPoint" Options="@BomChartOptions" @ref="BomChartRef">
+                                <ApexPointSeries TItem="PackBarPoint"
+                                                 Items="@BomBarData"
+                                                 SeriesType="SeriesType.Bar"
+                                                 XValue="@(e => e.Label)"
+                                                 YValue="@(e => (decimal)e.Count)"
+                                                 Name="Packs Ordered" />
+                            </ApexChart>
+                        </div>
+                    }
+                </div>
+
+                @if (ShowingHistory == 3 && BomHistory.Count > 0)
+                {
+                    <div class="apm-history-panel">
+                        <h4>Last @BomHistory.Count Calculations</h4>
+                        @foreach (var h in BomHistory)
+                        {
+                            <div class="apm-history-row" @onclick="@(() => RestoreBomHistory(h))">
+                                <span>@h.TotalScrews screws &mdash; $@h.TotalCost (@h.Leftover waste)</span>
+                                <span class="apm-history-time">@h.Timestamp.ToString("HH:mm:ss")</span>
+                            </div>
+                        }
+                    </div>
+                }
+            </section>
+
+        </div>
+    </main>
+</div>
+
+@code {
+    // ── Unit toggle ─────────────────────────────────────────────
+    bool UseInches = false;
+    string UnitLabel => UseInches ? "in" : "mm";
+
+    void ToggleUnit()
+    {
+        UseInches = !UseInches;
+        if (GeoResult != null)
+            GeoResult.DistanceFromOrigin *= UseInches ? 0.0393701 : 25.4;
+    }
+
+    // ── History ─────────────────────────────────────────────────
+    int ShowingHistory = 0;
+    void ToggleHistory(int module) => ShowingHistory = (ShowingHistory == module) ? 0 : module;
+
+    List<GeometryResult> GeoHistory = new List<GeometryResult>();
+    List<ToleranceResult> TolHistory = new List<ToleranceResult>();
+    List<BomResult> BomHistory = new List<BomResult>();
+
+    // ── MODULE 1 ────────────────────────────────────────────────
+    GeoInput Geo = new GeoInput();
+    GeometryResult? GeoResult = null;
+    bool GeoLoading = false;
+    string GeoError = "";
+
+    async Task ComputeGeometry()
+    {
+        GeoError = ""; GeoLoading = true; StateHasChanged();
+        await Task.Delay(400);
+        try
+        {
+            GeoResult = CalcService.ComputeGeometry(Geo);
+            if (UseInches) GeoResult.DistanceFromOrigin *= 0.0393701;
+            if (GeoHistory.Count >= 5) GeoHistory.RemoveAt(0);
+            GeoHistory.Add(GeoResult);
+        }
+        catch (Exception ex) { GeoError = ex.Message; GeoResult = null; }
+        GeoLoading = false;
+    }
+
+    void RestoreGeoHistory(GeometryResult h) { GeoResult = h; ShowingHistory = 0; }
+
+    // ── MODULE 2 ────────────────────────────────────────────────
+    TolInput Tol = new TolInput
+    {
+        PartId = "Rib-442",
+        NominalLength = 100,
+        StdDev = 0.05,
+        SampleSize = 30,
+        SampleMean = 100.01,
+        ToleranceLimit = 0.5
+    };
+    ToleranceResult? TolResult = null;
+    bool TolLoading = false;
+    string TolError = "";
+    List<NormalDistPoint> NormalCurveData = new List<NormalDistPoint>();
+    ApexChart<NormalDistPoint>? NormalChartRef = null;
+
+    ApexChartOptions<NormalDistPoint> NormalChartOptions = new ApexChartOptions<NormalDistPoint>
+    {
+        Chart = new Chart { Background = "transparent", Toolbar = new Toolbar { Show = false } },
+        Colors = new List<string> { "#00d4b8" },
+        Fill = new Fill { Type = FillType.Gradient, Gradient = new FillGradient { ShadeIntensity = 1, OpacityFrom = 0.6, OpacityTo = 0.1 } },
+        Stroke = new Stroke { Curve = Curve.Smooth, Width = new List<int> { 2 } },
+        Xaxis = new XAxis { Title = new AxisTitle { Text = "Part Length" } },
+        Yaxis = new List<YAxis> { new YAxis { Title = new AxisTitle { Text = "Density" }, DecimalsInFloat = 4 } },
+        Grid = new Grid { BorderColor = "#2a2a3a" }
+    };
+
+    async Task ComputeTolerance()
+    {
+        TolError = ""; TolLoading = true; StateHasChanged();
+        await Task.Delay(400);
+        try
+        {
+            TolResult = CalcService.ComputeTolerance(Tol);
+            NormalCurveData = CalcService.BuildNormalCurve(Tol.SampleMean, Tol.StdDev, Tol.NominalLength, Tol.ToleranceLimit);
+            if (TolHistory.Count >= 5) TolHistory.RemoveAt(0);
+            TolHistory.Add(TolResult);
+            if (NormalChartRef != null) await NormalChartRef.UpdateSeriesAsync(true);
+        }
+        catch (Exception ex) { TolError = ex.Message; TolResult = null; }
+        TolLoading = false;
+    }
+
+    void RestoreTolHistory(ToleranceResult h) { TolResult = h; ShowingHistory = 0; }
+
+    // ── MODULE 3 ────────────────────────────────────────────────
+    BomInput Bom = new BomInput();
+    BomResult? BomResult = null;
+    bool BomLoading = false;
+    string BomError = "";
+    List<PackBarPoint> BomBarData = new List<PackBarPoint>();
+    ApexChart<PackBarPoint>? BomChartRef = null;
+
+    ApexChartOptions<PackBarPoint> BomChartOptions = new ApexChartOptions<PackBarPoint>
+    {
+        Chart = new Chart { Background = "transparent", Toolbar = new Toolbar { Show = false } },
+        Colors = new List<string> { "#f5a623", "#e07b00", "#b85e00" },
+        PlotOptions = new PlotOptions { Bar = new PlotOptionsBar { Distributed = true, BorderRadius = 4 } },
+        Xaxis = new XAxis { Title = new AxisTitle { Text = "Pack Size" } },
+        Yaxis = new List<YAxis> { new YAxis { Title = new AxisTitle { Text = "Quantity" }, DecimalsInFloat = 0 } },
+        Grid = new Grid { BorderColor = "#2a2a3a" },
+        Legend = new Legend { Show = false }
+    };
+
+    async Task ComputeBom()
+    {
+        BomError = ""; BomLoading = true; StateHasChanged();
+        await Task.Delay(400);
+        try
+        {
+            BomResult = CalcService.ComputeBom(Bom);
+            BomBarData = new List<PackBarPoint>
+            {
+                new PackBarPoint("Small (50)",   BomResult.SmallPacks),
+                new PackBarPoint("Medium (120)", BomResult.MediumPacks),
+                new PackBarPoint("Large (300)",  BomResult.LargePacks)
+            };
+            if (BomHistory.Count >= 5) BomHistory.RemoveAt(0);
+            BomHistory.Add(BomResult);
+            if (BomChartRef != null) await BomChartRef.UpdateSeriesAsync(true);
+        }
+        catch (Exception ex) { BomError = ex.Message; BomResult = null; }
+        BomLoading = false;
+    }
+
+    void RestoreBomHistory(BomResult h) { BomResult = h; ShowingHistory = 0; }
+
+    // ── PDF Export ──────────────────────────────────────────────
+    async Task ExportPdf() => await JS.InvokeVoidAsync("apmExportPdf");
+}

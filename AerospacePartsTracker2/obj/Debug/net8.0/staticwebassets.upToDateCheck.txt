@@ -1,0 +1,9 @@
+wwwroot\app.css
+wwwroot\bootstrap\bootstrap.min.css
+wwwroot\bootstrap\bootstrap.min.css.map
+wwwroot\css\home.css
+wwwroot\css\MainLayout.css
+wwwroot\css\NavMenu.css
+wwwroot\css\parts-manufacturing.css
+wwwroot\favicon.png
+wwwroot\js\apm-interop.js
